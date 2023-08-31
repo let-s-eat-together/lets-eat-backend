@@ -26,4 +26,12 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
+
+    @Transactional
+    public Long join(User user) {
+        userRepository.save(user);
+        return user.getId();
+    }
+
+
 }
