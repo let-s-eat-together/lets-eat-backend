@@ -1,6 +1,7 @@
 package com.example.letseat.user;
 
 import com.example.letseat.plan.Plan;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class User {
     @Column(nullable = false)
     private String device_id;
 
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "user_plan",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -29,6 +31,7 @@ public class User {
     private List<Plan> plans = new ArrayList<>();
 
     public void addPlan(Plan plan) {
+        plan.getUsers().add(this);
         plans.add(plan);
     }
 }

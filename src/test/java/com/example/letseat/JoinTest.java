@@ -10,6 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @SpringBootTest
 public class JoinTest {
     @Autowired
@@ -33,16 +37,33 @@ public class JoinTest {
         user2.setDevice_id("User2DeviceId");
         userRepository.save(user2);
 
-        Plan plan = new Plan();
-        plan.setId(1L);
-        planRepository.save(plan);
+        User user3 = new User();
+        user3.setId(3L);
+        user3.setName("User3");
+        user3.setDevice_id("User3DeviceId");
+        userRepository.save(user3);
+
+
+        Plan plan1 = new Plan();
+        plan1.setId(1L);
+        plan1.setCreation_date(LocalDateTime.now());
+        plan1.setExpiration_date(LocalDateTime.of(2023, 6, 2, 0, 0));
+        planRepository.save(plan1);
+
+        Plan plan2 = new Plan();
+        plan2.setId(2L);
+        plan2.setCreation_date(LocalDateTime.now());
+        plan2.setExpiration_date(LocalDateTime.of(2023, 6, 1, 0, 0));
+        planRepository.save(plan2);
 
         User savedUser1 = userRepository.findById(1L).get();
         User savedUser2 = userRepository.findById(2L).get();
-        Plan savedPlan = planRepository.findById(1L).get();
-        savedPlan.addUser(savedUser1);
-        savedPlan.addUser(savedUser2);
-        savedUser1.addPlan(savedPlan);
-        savedUser2.addPlan(savedPlan);
+        User savedUser3 = userRepository.findById(3L).get();
+        Plan savedPlan1 = planRepository.findById(1L).get();
+        Plan savedPlan2 = planRepository.findById(2L).get();
+        savedUser1.addPlan(savedPlan1);
+        savedUser2.addPlan(savedPlan1);
+        savedUser1.addPlan(savedPlan2);
+        savedUser3.addPlan(savedPlan2);
     }
 }
