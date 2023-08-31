@@ -1,10 +1,12 @@
 package com.example.letseat.plan;
 
 import com.example.letseat.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,14 +20,11 @@ public class Plan {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date creation_date;
+    private LocalDateTime creation_date;
 
-    private Date expriation_date;
+    private LocalDateTime expiration_date;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "plans")
     private List<User> users = new ArrayList<>();
-
-    public void addUser(User user) {
-        users.add(user);
-    }
 }

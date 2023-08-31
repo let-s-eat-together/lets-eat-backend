@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class planDto {
+public class PlanDto {
     private Long id;
     private Date creation_date;
     private Date expriation_date;
