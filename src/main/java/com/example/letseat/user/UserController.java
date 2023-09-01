@@ -1,6 +1,7 @@
 package com.example.letseat.user;
 
-import com.example.letseat.plan.Plan;
+import com.example.letseat.plan.PlanDto;
+import com.example.letseat.user.data.ListRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,10 +15,10 @@ import java.util.List;
 @Controller
 public class UserController {
     private final UserService userService;
-    @GetMapping("/list/{id}")
+    @GetMapping("/list")
     @ResponseBody
-    public List<Plan> lists(@PathVariable Long id) {
-        return userService.findPlanByUserId(id);
+    public List<PlanDto> lists(@RequestBody @Valid ListRequest request) {
+        return userService.findPlanDtoByUserId(request.getUser_id());
     }
 
     @PostMapping("/sign-up")
@@ -41,5 +42,4 @@ public class UserController {
             this.id = id;
         }
     }
-
 }
