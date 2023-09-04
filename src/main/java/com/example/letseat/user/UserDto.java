@@ -2,13 +2,11 @@ package com.example.letseat.user;
 
 import com.example.letseat.plan.PlanDto;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 public class UserDto {
     private Long id;
