@@ -1,8 +1,8 @@
 package com.example.letseat.user.data;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class ListRequest {
     private Long user_id;
 }
