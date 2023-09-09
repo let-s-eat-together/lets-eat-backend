@@ -4,6 +4,7 @@ import com.example.letseat.plan.Plan;
 import com.example.letseat.plan.PlanRepository;
 import com.example.letseat.user.User;
 import com.example.letseat.user.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,8 +12,6 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @SpringBootTest
 public class JoinTest {
@@ -20,6 +19,9 @@ public class JoinTest {
     PlanRepository planRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EntityManager em;
 
     @Test
     @Transactional
@@ -46,14 +48,14 @@ public class JoinTest {
 
         Plan plan1 = new Plan();
         plan1.setId(1L);
-        plan1.setCreation_date(LocalDateTime.now());
-        plan1.setExpiration_date(LocalDateTime.of(2023, 6, 2, 0, 0));
+        plan1.setCreation_date(LocalDate.now());
+        plan1.setExpiration_date(LocalDate.of(2023, 6, 2));
         planRepository.save(plan1);
 
         Plan plan2 = new Plan();
         plan2.setId(2L);
-        plan2.setCreation_date(LocalDateTime.now());
-        plan2.setExpiration_date(LocalDateTime.of(2023, 6, 1, 0, 0));
+        plan2.setCreation_date(LocalDate.now());
+        plan2.setExpiration_date(LocalDate.of(2023,8,3));
         planRepository.save(plan2);
 
         User savedUser1 = userRepository.findById(1L).get();
@@ -61,9 +63,9 @@ public class JoinTest {
         User savedUser3 = userRepository.findById(3L).get();
         Plan savedPlan1 = planRepository.findById(1L).get();
         Plan savedPlan2 = planRepository.findById(2L).get();
-        savedUser1.addPlan(savedPlan1);
-        savedUser2.addPlan(savedPlan1);
-        savedUser1.addPlan(savedPlan2);
-        savedUser3.addPlan(savedPlan2);
+        savedPlan1.addUser(savedUser1);
+        savedPlan1.addUser(savedUser2);
+        savedPlan2.addUser(savedUser1);
+        savedPlan2.addUser(savedUser3);
     }
 }

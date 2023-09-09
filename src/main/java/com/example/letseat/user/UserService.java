@@ -10,7 +10,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -51,10 +50,6 @@ public class UserService {
                 .device_id(user.getDevice_id())
                 .plans(planDtoList)
                 .build();
-    }
-
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
     }
 
     @Transactional
