@@ -7,22 +7,19 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Optional;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class PlanService {
-    private final PlanRepository planRepository;
-
-    public Optional<Plan> findPlanById(Long id) {
-        return planRepository.findById(id);
-    }
 
     public String generateQR(PlanRequestDto planRequest) throws WriterException, IOException {
         String url = planRequest.getUrl();
@@ -43,7 +40,7 @@ public class PlanService {
         byte[] imageBytes = baos.toByteArray();
 
         return Base64.getEncoder().encodeToString(imageBytes);
-
     }
+
 
 }
