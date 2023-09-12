@@ -57,4 +57,17 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+//    public Optional<com.example.letseat.user.User> findById(Long id) {
+//        return userRepository.findById(id);
+//    }
+//    public String login(String device_id) {
+//        Optional<com.example.letseat.user.User> findMember = userRepository.findByDeviceId(device_id);
+//        if (findMember.isPresent()) {
+//            User user = findMember.get();
+//            return "user_id=" + user.getId();
+//        } else {
+//            return "-1";
+//        }
+//
+//    }
 }
