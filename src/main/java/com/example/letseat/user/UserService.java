@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -47,7 +48,7 @@ public class UserService {
         return UserDto.builder()
                 .id(user.getId())
                 .name(user.getName())
-                .device_id(user.getDevice_id())
+                .device_id(user.getDeviceId())
                 .plans(planDtoList)
                 .build();
     }
@@ -60,14 +61,14 @@ public class UserService {
 //    public Optional<com.example.letseat.user.User> findById(Long id) {
 //        return userRepository.findById(id);
 //    }
-//    public String login(String device_id) {
-//        Optional<com.example.letseat.user.User> findMember = userRepository.findByDeviceId(device_id);
-//        if (findMember.isPresent()) {
-//            User user = findMember.get();
-//            return "user_id=" + user.getId();
-//        } else {
-//            return "-1";
-//        }
-//
-//    }
+    public Long login(String device_id) {
+        Optional<User> findMember = userRepository.findByDeviceId(device_id);
+        if (findMember.isPresent()) {
+            User user = findMember.get();
+            return user.getId();
+        } else {
+            return -1L;
+        }
+
+    }
 }

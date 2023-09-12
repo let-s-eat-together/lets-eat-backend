@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,9 +20,14 @@ public class PlanController {
     @PostMapping("/qr")
     @ResponseBody
     public ResponseEntity<String> lists(@RequestBody @Valid PlanRequestDto planRequest) throws IOException, WriterException {
-
         String qrcode = planService.generateQR(planRequest);
-
         return ResponseEntity.ok(qrcode);
     }
+    @GetMapping("/sting")
+    @ResponseBody
+    public ResponseEntity<?> sting(@RequestBody @Valid StingRequestDto stingRequestDto){
+        return ResponseEntity.ok(planService.stingInfo(stingRequestDto));
+
+    }
+
 }

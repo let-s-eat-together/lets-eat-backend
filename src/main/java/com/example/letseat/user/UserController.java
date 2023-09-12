@@ -2,6 +2,7 @@ package com.example.letseat.user;
 
 import com.example.letseat.plan.PlanDto;
 import com.example.letseat.user.data.ListRequest;
+import com.example.letseat.user.data.LoginRequest;
 import com.example.letseat.user.data.SignUpRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -29,17 +30,20 @@ public class UserController {
     public Map<String, Object> saveMember(@RequestBody @Valid SignUpRequest request) {
         User user = new User();
         user.setName(request.getUsername());
-        user.setDevice_id(request.getDevice_id());
+        user.setDeviceId(request.getDevice_id());
         Long userId = userService.join(user);
         Map<String, Object> response = new HashMap<>();
         response.put("user_id", userId);
         return response;
     }
 
-//
-//    @GetMapping("/login")
-//    @ResponseBody
-//    public  ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
-//        return ResponseEntity.ok(userService.login(loginRequest.getDevice_id()));
-//    }
+
+    @GetMapping("/login")
+    @ResponseBody
+    public  Map<String, Long> login(@RequestBody LoginRequest loginRequest){
+        Map<String, Long> response = new HashMap<>();
+        Long deviceId = userService.login(loginRequest.getDevice_id());
+        response.put("loginResult", deviceId);
+        return response;
+    }
 }

@@ -21,7 +21,7 @@ public class User {
     private String name;
 
     @Column(nullable = false)
-    private String device_id;
+    private String deviceId;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPlan> userPlans = new ArrayList<>();
