@@ -1,6 +1,8 @@
 package com.example.letseat.plan;
 
 import com.example.letseat.plan.data.PlanRequest;
+import com.example.letseat.plan.data.QrRequest;
+import com.example.letseat.plan.data.QrResponse;
 import com.google.zxing.WriterException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,9 +24,9 @@ public class PlanController {
 
     @PostMapping("/qr")
     @ResponseBody
-    public ResponseEntity<String> lists(@RequestBody @Valid PlanRequestDto planRequest) throws IOException, WriterException {
+    public ResponseEntity<QrResponse> lists(@RequestBody @Valid QrRequest qrRequest) throws IOException, WriterException {
 
-        String qrcode = planService.generateQR(planRequest);
+        QrResponse qrcode = planService.generateQR(qrRequest);
 
         return ResponseEntity.ok(qrcode);
     }
