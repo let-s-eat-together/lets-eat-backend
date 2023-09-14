@@ -23,11 +23,5 @@ public class PlanController {
         String qrcode = planService.generateQR(planRequest);
         return ResponseEntity.ok(qrcode);
     }
-    @GetMapping("/sting")
-    @ResponseBody
-    public ResponseEntity<?> sting(@RequestBody @Valid StingRequestDto stingRequestDto){
-        return ResponseEntity.ok(planService.stingInfo(stingRequestDto));
-
-    }
 
 }

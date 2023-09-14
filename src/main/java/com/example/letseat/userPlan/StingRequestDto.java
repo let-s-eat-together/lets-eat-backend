@@ -1,4 +1,4 @@
-package com.example.letseat.plan;
+package com.example.letseat.userPlan;
 
 import lombok.Data;
 

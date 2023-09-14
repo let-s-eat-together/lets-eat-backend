@@ -25,9 +25,6 @@ import java.util.Optional;
 @Transactional
 @AllArgsConstructor
 public class PlanService {
-    private final UserRepository userRepository;
-
-    private final PlanRepository planRepository;
     public String generateQR(PlanRequestDto planRequest) throws WriterException, IOException {
         String url = planRequest.getUrl();
         Long sender_id = planRequest.getSender_id();
@@ -49,28 +46,4 @@ public class PlanService {
         return Base64.getEncoder().encodeToString(imageBytes);
     }
 
-    public String stingInfo(StingRequestDto stingRequestDto) {
-        Long myId = stingRequestDto.getUser_id();
-        Long planId = stingRequestDto.getPlan_id();
-        Optional<User> findMember  = userRepository.findNameById(myId);
-        User sendUser = findMember.get();
-
-        Date now = new Date();
-        // 출력 형식을 지정할 SimpleDateFormat 객체를 생성합니다.
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        // 현재 시간을 원하는 형식으로 문자열로 변환합니다.
-        String formattedDate = sdf.format(now);
-
-        Optional<Plan> usersWithSamePlan = planRepository.findById(planId);
-
-        if (!usersWithSamePlan.isEmpty()){
-            Long otherUserId = usersWithSamePlan.get().getId();
-            Optional<User> receiveMember = userRepository.findNameById(otherUserId);
-            User receiveUser = receiveMember.get();
-
-            return "sender_name : "+sendUser.getName()+", receiver_name : "+receiveUser.getName()+" , now_date : "+formattedDate;
-        }else{
-            return "result"+ -1;
-        }
-    }
 }
