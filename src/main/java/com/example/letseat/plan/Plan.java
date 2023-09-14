@@ -21,6 +21,7 @@ public class Plan {
 
     private LocalDate creation_date;
 
+    @Column(nullable = false)
     private LocalDate expiration_date;
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
