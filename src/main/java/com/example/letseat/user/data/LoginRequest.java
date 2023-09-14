@@ -3,8 +3,6 @@ package com.example.letseat.user.data;
 import lombok.Data;
 
 @Data
-public class SignUpRequest {
-    private String username;
+public class LoginRequest {
     private String device_id;
-
 }

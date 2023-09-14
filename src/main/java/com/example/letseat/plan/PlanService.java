@@ -1,5 +1,6 @@
 package com.example.letseat.plan;
 
+
 import com.example.letseat.plan.data.QrRequest;
 import com.example.letseat.plan.data.QrResponse;
 import com.example.letseat.user.User;
@@ -17,8 +18,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -60,6 +64,5 @@ public class PlanService {
         newPlan.addUser(receiver);
         planRepository.save(newPlan);
     }
-
 
 }
