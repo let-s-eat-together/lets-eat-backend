@@ -57,6 +57,10 @@ public class UserService {
         } else {
             return -1L;
         }
-
     }
+
+    public void updateUserName(User user, String newName) {
+        user.setUserName(newName);
+    }
+
 }
