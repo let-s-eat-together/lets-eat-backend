@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -29,4 +30,22 @@ public class UserController {
         Long id = userService.join(user);
         return ResponseEntity.ok("user_id: " + id);
     }
+    @PutMapping("/rename")
+    public ResponseEntity<String> changeUserName(
+            @RequestParam("user_name") String userName,
+            @RequestParam("user_id") Long userId) {
+        try {
+            if (userName != null && !userName.trim().isEmpty()) {
+                User user = new User();
+                userService.updateUserName(user, userName);
+                return ResponseEntity.ok(userName);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 이름은 공백일 수 없습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
+        }
+    }
+
+
 }

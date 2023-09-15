@@ -62,4 +62,10 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
+
+
+        public void updateUserName(User user, String newName) {
+
+            user.setUserName(newName);
+    }
 }

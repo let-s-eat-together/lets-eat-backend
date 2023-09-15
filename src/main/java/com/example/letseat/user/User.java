@@ -34,4 +34,8 @@ public class User {
         plan.getUsers().add(this);
         plans.add(plan);
     }
+
+    public void setUserName(String newName) {
+        this.name = newName;
+    }
 }
