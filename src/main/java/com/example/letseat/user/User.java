@@ -30,6 +30,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "plan_id"))
     private List<Plan> plans = new ArrayList<>();
 
+    
     public void addPlan(Plan plan) {
         plan.getUsers().add(this);
         plans.add(plan);

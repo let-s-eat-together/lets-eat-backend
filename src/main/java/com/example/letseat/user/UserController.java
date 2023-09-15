@@ -31,6 +31,7 @@ public class UserController {
         return ResponseEntity.ok("user_id: " + id);
     }
     @PutMapping("/rename")
+
     public ResponseEntity<String> changeUserName(
             @RequestParam("user_name") String userName,
             @RequestParam("user_id") Long userId) {
