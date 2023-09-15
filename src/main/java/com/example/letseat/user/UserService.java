@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,11 +38,25 @@ public class UserService {
             listResponses.add(listResponse);
         }
         return listResponses;
+
     }
 
     @Transactional
     public Long join(User user) {
         userRepository.save(user);
         return user.getId();
+    }
+//    public Optional<com.example.letseat.user.User> findById(Long id) {
+//        return userRepository.findById(id);
+//    }
+    public Long login(String device_id) {
+        Optional<User> findMember = userRepository.findByDeviceId(device_id);
+        if (findMember.isPresent()) {
+            User user = findMember.get();
+            return user.getId();
+        } else {
+            return -1L;
+        }
+
     }
 }

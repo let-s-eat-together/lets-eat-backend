@@ -1,5 +1,8 @@
 package com.example.letseat.plan;
 
+
+import com.example.letseat.plan.data.QrRequest;
+import com.example.letseat.plan.data.QrResponse;
 import com.example.letseat.user.User;
 import com.example.letseat.user.UserRepository;
 import com.google.zxing.BarcodeFormat;
@@ -15,8 +18,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -25,14 +31,12 @@ public class PlanService {
     private final PlanRepository planRepository;
     private final UserRepository userRepository;
 
-    public String generateQR(PlanRequestDto planRequest) throws WriterException, IOException {
-        String url = planRequest.getUrl();
-        Long sender_id = planRequest.getSender_id();
-        LocalDate expiration_date = planRequest.getExpiration_date();
+    public QrResponse generateQR(QrRequest qrRequest) throws WriterException, IOException {
+        Long sender_id = qrRequest.getSender_id();
+        LocalDate expiration_date = qrRequest.getExpiration_date();
 
         var qrCodeWriter = new QRCodeWriter();
         BitMatrix bitMatrix = qrCodeWriter.encode(
-                "URL: " + url +"\n" +
                 "SenderId: " + sender_id +"\n" +
                         "ExpirationDate:" + expiration_date + "\n", BarcodeFormat.QR_CODE, 300,300
         );
@@ -43,7 +47,11 @@ public class PlanService {
 
         byte[] imageBytes = baos.toByteArray();
 
-        return Base64.getEncoder().encodeToString(imageBytes);
+        QrResponse qrcode = new QrResponse();
+
+        qrcode.setQrcode(Base64.getEncoder().encodeToString(imageBytes));
+
+        return qrcode;
     }
 
     public void savePlan(Long senderId, Long receiverId, LocalDate expired_date) {
@@ -56,6 +64,5 @@ public class PlanService {
         newPlan.addUser(receiver);
         planRepository.save(newPlan);
     }
-
 
 }
