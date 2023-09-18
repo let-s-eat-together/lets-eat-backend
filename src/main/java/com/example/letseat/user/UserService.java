@@ -27,6 +27,7 @@ public class UserService {
     }
 
     private UserDto convertDto(User user) {
+
         List<Plan> planList = user.getPlans();
         List<PlanDto> planDtoList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
