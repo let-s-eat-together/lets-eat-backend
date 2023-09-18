@@ -1,7 +1,7 @@
 package com.example.letseat.user;
 
 import com.example.letseat.plan.Plan;
-import com.example.letseat.userPlan.UserPlan;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,22 +23,21 @@ public class User {
     @Column(nullable = false)
     private String deviceId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserPlan> userPlans = new ArrayList<>();
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(name = "user_plan",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "plan_id"))
+    private List<Plan> plans = new ArrayList<>();
+
 
     public void addPlan(Plan plan) {
-        UserPlan userPlan = new UserPlan();
-        userPlan.setPlan(plan);
-        userPlan.setUser(this);
-        plan.getUserPlans().add(userPlan);
-        userPlans.add(userPlan);
+        plan.getUsers().add(this);
+        plans.add(plan);
     }
 
-    public List<Plan> getPlans() {
-        ArrayList<Plan> plans = new ArrayList<>();
-        for(UserPlan userPlan : userPlans) {
-            plans.add(userPlan.getPlan());
-        }
-        return plans;
+    public void setUserName(String newName) {
+        this.name = newName;
     }
 }
+

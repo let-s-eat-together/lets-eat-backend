@@ -1,6 +1,6 @@
 package com.example.letseat.user;
 
-import com.example.letseat.plan.PlanDto;
+import com.example.letseat.user.data.ListResponse;
 import com.example.letseat.user.data.ListRequest;
 import com.example.letseat.user.data.LoginRequest;
 import com.example.letseat.user.data.SignUpRequest;
@@ -21,8 +21,9 @@ public class UserController {
     private final UserService userService;
     @GetMapping("/list")
     @ResponseBody
-    public List<PlanDto> lists(@RequestBody @Valid ListRequest request) {
-        return userService.findPlanDtoByUserId(request.getUser_id());
+    public ResponseEntity<List<ListResponse>> lists(@RequestBody @Valid ListRequest request) {
+        List<ListResponse> planList = userService.findPlanByUserId(request.getUser_id());
+        return ResponseEntity.ok(planList);
     }
 
     @PostMapping("/sign-up")

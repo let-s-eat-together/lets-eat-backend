@@ -1,14 +1,13 @@
 package com.example.letseat.user;
 
 import com.example.letseat.plan.Plan;
-import com.example.letseat.plan.PlanDto;
+import com.example.letseat.user.data.ListResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,41 +16,28 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
-    public List<PlanDto> findPlanDtoByUserId(Long id) {
-        User findUser = userRepository.findById(id).orElse(null);
-        if (findUser != null) {
-            return convertDto(findUser).getPlans();
-        }
-        return Collections.emptyList();
-    }
-
-    private UserDto convertDto(User user) {
-
-        List<Plan> planList = user.getPlans();
-        List<PlanDto> planDtoList = new ArrayList<>();
+    public List<ListResponse> findPlanByUserId(Long id) {
+        User findUser = userRepository.findById(id).orElseThrow();
+        List<Plan> planList = findUser.getPlans();
+        List<ListResponse> listResponses = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        for (Plan plan : planList) {
-            Long user_id = user.getId();
+        for(Plan plan : planList) {
             String name;
-            if (!user_id.equals(plan.getUsers().get(0).getId()))
+            if (!id.equals(plan.getUsers().get(0).getId()))
                 name = plan.getUsers().get(0).getName();
-            else
+            else if(!id.equals(plan.getUsers().get(1).getId()))
                 name = plan.getUsers().get(1).getName();
-            PlanDto planDto = PlanDto.builder()
-                    .id(plan.getId())
+            else throw new IllegalArgumentException("Plan doesn't have other user");
+            ListResponse listResponse = ListResponse.builder()
+                    .plan_id(plan.getId())
                     .expiration_date(plan.getExpiration_date().format(formatter))
                     .creation_date(plan.getCreation_date().format(formatter))
-                    .otherUserName(name)
+                    .other_user_name(name)
                     .build();
-            planDtoList.add(planDto);
+            listResponses.add(listResponse);
         }
-        return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .device_id(user.getDeviceId())
-                .plans(planDtoList)
-                .build();
+        return listResponses;
+
     }
 
     @Transactional
@@ -70,6 +56,10 @@ public class UserService {
         } else {
             return -1L;
         }
-
     }
+
+    public void updateUserName(User user, String newName) {
+        user.setUserName(newName);
+    }
+
 }
