@@ -16,7 +16,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-
     public List<ListResponse> findPlanByUserId(Long id) {
         User findUser = userRepository.findById(id).orElseThrow();
         List<Plan> planList = findUser.getPlans();
