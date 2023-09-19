@@ -45,9 +45,10 @@ public class PlanController {
     @ResponseBody
     public ResponseEntity<Object> test() {
         class TestResponse {
-            public final String connect = "OK";
+            public String connect;
         }
         TestResponse testResponse = new TestResponse();
+        testResponse.connect = "OK";
         return ResponseEntity.ok(testResponse);
     }
 }
