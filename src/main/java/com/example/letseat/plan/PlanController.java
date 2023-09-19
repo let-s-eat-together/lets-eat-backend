@@ -40,4 +40,14 @@ public class PlanController {
         LocalDate expiredDate = planRequest.getExpired_date();
         planService.savePlan(senderId, receiverId, expiredDate);
     }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public ResponseEntity<Object> test() {
+        class TestResponse {
+            public final String connect = "OK";
+        }
+        TestResponse testResponse = new TestResponse();
+        return ResponseEntity.ok(testResponse);
+    }
 }
