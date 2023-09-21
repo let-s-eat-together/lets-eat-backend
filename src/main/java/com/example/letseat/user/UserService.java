@@ -1,7 +1,9 @@
 package com.example.letseat.user;
 
+import com.example.letseat.auth.jwt.JwtTokenProvider;
 import com.example.letseat.plan.Plan;
 import com.example.letseat.user.data.ListResponse;
+import com.example.letseat.user.data.TokenDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+
     public List<ListResponse> findPlanByUserId(Long id) {
         User findUser = userRepository.findById(id).orElseThrow();
         List<Plan> planList = findUser.getPlans();
@@ -45,9 +49,6 @@ public class UserService {
         userRepository.save(user);
         return user.getId();
     }
-//    public Optional<com.example.letseat.user.User> findById(Long id) {
-//        return userRepository.findById(id);
-//    }
     public Long login(String device_id) {
         Optional<User> findMember = userRepository.findByDeviceId(device_id);
         if (findMember.isPresent()) {
@@ -56,6 +57,13 @@ public class UserService {
         } else {
             return -1L;
         }
+    }
+
+    public TokenDto newLogin(String deviceId){
+        User findUser = userRepository.findByDeviceId(deviceId)
+                .orElseThrow(()-> new RuntimeException("존재하지 않는 기기 id입니다."));
+        return TokenDto.builder().token(jwtTokenProvider.createToken(findUser))
+                .user_id(findUser.getId()).build();
     }
 
     public void updateUserName(User user, String newName) {
