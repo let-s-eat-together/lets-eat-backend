@@ -1,6 +1,8 @@
 package com.example.letseat.userPlan;
 
-import com.example.letseat.plan.PlanService;
+import com.example.letseat.auth.AuthMember;
+import com.example.letseat.auth.argumentresolver.Auth;
+import com.example.letseat.userPlan.dto.StingRequestDto;
 import com.example.letseat.userPlan.dto.StingResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,5 +25,20 @@ public class UserPlanController {
         return ResponseEntity.ok(stingResponse);
 
     }
+
+    @ResponseBody
+    public ResponseEntity<StingResponse> newSting(@Auth AuthMember authMember, @RequestBody @Valid StingRequestDto stingRequestDto){
+        System.out.println("authMember = " + authMember);
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        Long user_id = authMember.getId();
+        System.out.println("user_id = " + user_id);
+
+        StingResponse stingResponse = userPlanService.stingInfo(user_id, stingRequestDto);
+        return ResponseEntity.ok(stingResponse);
+
+    }
+
 
 }
