@@ -28,6 +28,7 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
     public String createToken(User user){
+        System.out.println("전달될 유저 아이디 : "+user.getId());
         Date now = new Date();
         String compact = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
