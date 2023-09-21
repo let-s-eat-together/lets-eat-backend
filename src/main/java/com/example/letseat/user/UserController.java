@@ -1,9 +1,6 @@
 package com.example.letseat.user;
 
-import com.example.letseat.user.data.ListResponse;
-import com.example.letseat.user.data.ListRequest;
-import com.example.letseat.user.data.LoginRequest;
-import com.example.letseat.user.data.SignUpRequest;
+import com.example.letseat.user.data.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    @ResponseBody
+    @ResponseBody // device id 중복 기능 추가해야함.
     public Map<String, Object> saveMember(@RequestBody @Valid SignUpRequest request) {
         User user = new User();
         user.setName(request.getUsername());
@@ -39,12 +36,33 @@ public class UserController {
     }
 
 
+//    @GetMapping("/login")
+//    @ResponseBody
+//    public  Map<String, Long> login(@RequestBody LoginRequest loginRequest){
+//        Map<String, Long> response = new HashMap<>();
+//        Long deviceId = userService.login(loginRequest.getDevice_id());
+//        response.put("loginResult", deviceId);
+//        return response;
+//    }
     @GetMapping("/login")
-    @ResponseBody
-    public  Map<String, Long> login(@RequestBody LoginRequest loginRequest){
-        Map<String, Long> response = new HashMap<>();
-        Long deviceId = userService.login(loginRequest.getDevice_id());
-        response.put("loginResult", deviceId);
-        return response;
+    public ResponseEntity<TokenDto> newLogin(@RequestBody LoginRequest loginRequest){
+        return ResponseEntity.ok(userService.newLogin(loginRequest.getDevice_id()));
     }
+    @PutMapping("/rename")
+    public ResponseEntity<String> changeUserName(
+            @RequestParam("user_name") String userName,
+            @RequestParam("user_id") Long userId) {
+        try {
+            if (userName != null && !userName.trim().isEmpty()) {
+                User user = new User();
+                userService.updateUserName(user, userName);
+                return ResponseEntity.ok(userName);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 이름은 공백일 수 없습니다.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
+        }
+    }
+
 }

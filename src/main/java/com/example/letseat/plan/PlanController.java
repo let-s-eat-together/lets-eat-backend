@@ -1,5 +1,6 @@
 package com.example.letseat.plan;
 
+import com.example.letseat.plan.data.MetRequest;
 import com.example.letseat.plan.data.PlanRequest;
 import com.example.letseat.plan.data.QrRequest;
 import com.example.letseat.plan.data.QrResponse;
@@ -10,11 +11,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -44,6 +41,12 @@ public class PlanController {
         planService.savePlan(senderId, receiverId, expiredDate);
     }
 
+    @PutMapping("/met")
+    @ResponseBody
+    public void changeMet(@RequestBody @Valid MetRequest metRequest){
+        Long planId = metRequest.getPlan_id();
+        planService.changeToTrueAboutMet(planId);
+    }
     @GetMapping("/test")
     @ResponseBody
     public ResponseEntity<Object> test() throws IOException{

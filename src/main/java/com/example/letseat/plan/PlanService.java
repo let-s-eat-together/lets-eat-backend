@@ -65,4 +65,8 @@ public class PlanService {
         planRepository.save(newPlan);
     }
 
+    public void changeToTrueAboutMet(Long planId){
+        planRepository.setMetTrueById(planId);
+    }
+
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserPlanController {
     private final UserPlanService userPlanService;
 
-
     @GetMapping("/sting")
     @ResponseBody
     public ResponseEntity<StingResponse> sting(@RequestBody @Valid StingRequestDto stingRequestDto){

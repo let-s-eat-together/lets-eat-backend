@@ -5,6 +5,7 @@ import com.example.letseat.userPlan.UserPlan;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,6 +27,9 @@ public class Plan {
 
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL)
     private List<UserPlan> userPlans = new ArrayList<>();
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean met;
 
     public void addUser(User user) {
         user.addPlan(this);
