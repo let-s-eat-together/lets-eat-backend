@@ -1,5 +1,6 @@
 package com.example.letseat.plan;
 
+import com.example.letseat.plan.data.MetRequest;
 import com.example.letseat.plan.data.PlanRequest;
 import com.example.letseat.plan.data.QrRequest;
 import com.example.letseat.plan.data.QrResponse;
@@ -9,11 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -40,4 +37,12 @@ public class PlanController {
         LocalDate expiredDate = planRequest.getExpired_date();
         planService.savePlan(senderId, receiverId, expiredDate);
     }
+
+    @PutMapping("/met")
+    @ResponseBody
+    public void changeMet(@RequestBody @Valid MetRequest metRequest){
+        Long planId = metRequest.getPlan_id();
+        planService.changeToTrueAboutMet(planId);
+    }
+
 }
