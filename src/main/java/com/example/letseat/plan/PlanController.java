@@ -7,13 +7,16 @@ import com.example.letseat.plan.data.QrResponse;
 import com.google.zxing.WriterException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
@@ -44,5 +47,13 @@ public class PlanController {
         Long planId = metRequest.getPlan_id();
         planService.changeToTrueAboutMet(planId);
     }
+    @GetMapping("/test")
+    @ResponseBody
+    public ResponseEntity<Object> test() throws IOException{
+        ClassPathResource resource = new ClassPathResource("json/test.json");
 
+        String jsonContent = new String(Objects.requireNonNull(resource.getInputStream().readAllBytes()), StandardCharsets.UTF_8);
+
+        return ResponseEntity.ok(jsonContent);
+    }
 }
