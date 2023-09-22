@@ -1,6 +1,7 @@
 # LetsEat
 
-## Class Diagram
-![image](https://github.com/let-s-eat-together/lets-eat-backend/assets/44187050/30ff083d-deb7-4adb-8e09-31193063309f)
+## 엔티티 관계도
+![image](https://github.com/let-s-eat-together/lets-eat-backend/assets/44187050/cad58ee1-6a47-4da5-8bda-d906a7495268)
 
-Dto는 data를 전송해주기 위한 객체
+seq Entity는 다음 ID를 설정해주기 위한 Entity
+
