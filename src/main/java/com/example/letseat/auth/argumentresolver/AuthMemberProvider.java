@@ -24,8 +24,8 @@ public class AuthMemberProvider {
     }
 
     public AuthMember getAuthMember(AuthToken authToken){
-
-        Claims body = Jwts.parser().setSigningKey(secretKey.getBytes())
+//jwt trust 문제 생길 경우 setSigning에 시크릿키.getBytes()로. 우선은 없이 해야 동작함.
+        Claims body = Jwts.parser().setSigningKey(secretKey)
                 .parseClaimsJws(authToken.getToken()).getBody();
         return AuthMember.builder()
                 .id(body.get("id",Long.class))
