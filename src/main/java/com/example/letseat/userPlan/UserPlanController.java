@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UserPlanController {
     private final UserPlanService userPlanService;
 
-    @GetMapping("/sting")
     @ResponseBody
     public ResponseEntity<StingResponse> sting(@RequestBody @Valid StingRequestDto stingRequestDto){
         StingResponse stingResponse = userPlanService.stingInfo(stingRequestDto);
@@ -26,6 +25,8 @@ public class UserPlanController {
 
     }
 
+
+    @GetMapping("/sting")
     @ResponseBody
     public ResponseEntity<StingResponse> newSting(@Auth AuthMember authMember, @RequestBody @Valid StingRequestDto stingRequestDto){
         System.out.println("authMember = " + authMember);

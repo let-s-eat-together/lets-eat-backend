@@ -30,19 +30,19 @@ public class JoinTest {
         User user1 = new User();
         user1.setId(1L);
         user1.setName("User1");
-        user1.setDevice_id("User1DeviceId");
+        user1.setDeviceId("User1DeviceId");
         userRepository.save(user1);
 
         User user2 = new User();
         user2.setId(2L);
         user2.setName("User2");
-        user2.setDevice_id("User2DeviceId");
+        user2.setDeviceId("User2DeviceId");
         userRepository.save(user2);
 
         User user3 = new User();
         user3.setId(3L);
         user3.setName("User3");
-        user3.setDevice_id("User3DeviceId");
+        user3.setDeviceId("User3DeviceId");
         userRepository.save(user3);
 
 

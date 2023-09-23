@@ -1,5 +1,7 @@
 package com.example.letseat.plan;
 
+import com.example.letseat.auth.AuthMember;
+import com.example.letseat.auth.argumentresolver.Auth;
 import com.example.letseat.plan.data.MetRequest;
 import com.example.letseat.plan.data.PlanRequest;
 import com.example.letseat.plan.data.QrRequest;
@@ -25,18 +27,25 @@ public class PlanController {
 
     @PostMapping("/qr")
     @ResponseBody
-    public ResponseEntity<QrResponse> lists(@RequestBody @Valid QrRequest qrRequest) throws IOException, WriterException {
+    public ResponseEntity<QrResponse> lists(@Auth AuthMember authMember, @RequestBody @Valid QrRequest qrRequest) throws IOException, WriterException {
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        Long user_id = authMember.getId();
 
-        QrResponse qrcode = planService.generateQR(qrRequest);
+        QrResponse qrcode = planService.generateQR(user_id, qrRequest);
 
         return ResponseEntity.ok(qrcode);
     }
 
     @PostMapping("/plan")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void plan(@RequestBody @Valid PlanRequest planRequest) {
+    public void plan(@Auth AuthMember authMember, @RequestBody @Valid PlanRequest planRequest) {
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        Long receiverId = authMember.getId();
         Long senderId = planRequest.getSender_id();
-        Long receiverId = planRequest.getReceiver_id();
         LocalDate expiredDate = planRequest.getExpired_date();
         planService.savePlan(senderId, receiverId, expiredDate);
     }

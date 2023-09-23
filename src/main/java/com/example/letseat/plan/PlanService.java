@@ -31,8 +31,8 @@ public class PlanService {
     private final PlanRepository planRepository;
     private final UserRepository userRepository;
 
-    public QrResponse generateQR(QrRequest qrRequest) throws WriterException, IOException {
-        Long sender_id = qrRequest.getSender_id();
+    public QrResponse generateQR(Long user_id, QrRequest qrRequest) throws WriterException, IOException {
+        Long sender_id = user_id;
         LocalDate expiration_date = qrRequest.getExpiration_date();
 
         var qrCodeWriter = new QRCodeWriter();

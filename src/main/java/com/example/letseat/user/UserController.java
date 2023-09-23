@@ -1,5 +1,7 @@
 package com.example.letseat.user;
 
+import com.example.letseat.auth.AuthMember;
+import com.example.letseat.auth.argumentresolver.Auth;
 import com.example.letseat.user.data.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -11,15 +13,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
 public class UserController {
     private final UserService userService;
+    private final UserRepository userRepository;
+
     @GetMapping("/list")
     @ResponseBody
-    public ResponseEntity<List<ListResponse>> lists(@RequestBody @Valid ListRequest request) {
-        List<ListResponse> planList = userService.findPlanByUserId(request.getUser_id());
+    public ResponseEntity<List<ListResponse>> lists(@Auth AuthMember authMember) {
+        System.out.println("authMember = " + authMember);
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        Long user_id = authMember.getId();
+        List<ListResponse> planList = userService.findPlanByUserId(user_id);
         return ResponseEntity.ok(planList);
     }
 
@@ -54,9 +64,11 @@ public class UserController {
             @RequestParam("user_id") Long userId) {
         try {
             if (userName != null && !userName.trim().isEmpty()) {
-                User user = new User();
-                userService.updateUserName(user, userName);
+                Optional<User> user = userRepository.findById(userId);
+                User real_user = user.get();
+                userService.updateUserName(real_user, userName);
                 return ResponseEntity.ok(userName);
+
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 이름은 공백일 수 없습니다.");
             }
@@ -64,5 +76,10 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
         }
     }
+
+//    User user = new User();
+//                userService.updateUserName(user, userName);
+//                return ResponseEntity.ok(userName);
+
 
 }
