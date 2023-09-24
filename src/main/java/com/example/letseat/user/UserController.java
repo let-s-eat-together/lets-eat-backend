@@ -36,6 +36,10 @@ public class UserController {
     @PostMapping("/sign-up")
     @ResponseBody // device id 중복 기능 추가해야함.
     public Map<String, Object> saveMember(@RequestBody @Valid SignUpRequest request) {
+        Optional<User> checkExist = userRepository.findByDeviceId(request.getDevice_id());
+        if(checkExist.isPresent()){
+            throw new RuntimeException("이미 존재하는 기기 id입니다.");
+        }
         User user = new User();
         user.setName(request.getUsername());
         user.setDeviceId(request.getDevice_id());
@@ -44,29 +48,19 @@ public class UserController {
         response.put("user_id", userId);
         return response;
     }
-
-
-//    @GetMapping("/login")
-//    @ResponseBody
-//    public  Map<String, Long> login(@RequestBody LoginRequest loginRequest){
-//        Map<String, Long> response = new HashMap<>();
-//        Long deviceId = userService.login(loginRequest.getDevice_id());
-//        response.put("loginResult", deviceId);
-//        return response;
-//    }
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<TokenDto> newLogin(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.ok(userService.newLogin(loginRequest.getDevice_id()));
     }
     @PutMapping("/rename")
     public ResponseEntity<String> changeUserName(
-            @RequestParam("user_name") String userName,
-            @RequestParam("user_id") Long userId) {
+    @RequestParam("user_name") String userName,
+    @RequestParam("user_id") Long userId) {
         try {
             if (userName != null && !userName.trim().isEmpty()) {
-                Optional<User> user = userRepository.findById(userId);
-                User real_user = user.get();
-                userService.updateUserName(real_user, userName);
+                User user = new User();
+                userService.updateUserName(user, userName);
+
                 return ResponseEntity.ok(userName);
 
             } else {
@@ -76,10 +70,4 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
         }
     }
-
-//    User user = new User();
-//                userService.updateUserName(user, userName);
-//                return ResponseEntity.ok(userName);
-
-
 }
