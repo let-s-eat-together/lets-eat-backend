@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,9 +27,9 @@ public class UserPlanController {
     }
 
 
-    @GetMapping("/sting")
+    @GetMapping("/sting/{planId}")
     @ResponseBody
-    public ResponseEntity<StingResponse> newSting(@Auth AuthMember authMember, @RequestBody @Valid StingRequestDto stingRequestDto){
+    public ResponseEntity<StingResponse> newSting(@Auth AuthMember authMember, @PathVariable Long planId){
         System.out.println("authMember = " + authMember);
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");
@@ -36,7 +37,7 @@ public class UserPlanController {
         Long user_id = authMember.getId();
         System.out.println("user_id = " + user_id);
 
-        StingResponse stingResponse = userPlanService.stingInfo(user_id, stingRequestDto);
+        StingResponse stingResponse = userPlanService.stingInfo(user_id, planId);
         return ResponseEntity.ok(stingResponse);
 
     }

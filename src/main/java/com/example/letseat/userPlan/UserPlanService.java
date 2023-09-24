@@ -40,10 +40,9 @@ public class UserPlanService {
         return new StingResponse(sendUser.getName(), receiver.getName(), formattedDate);
     }
 
-    public StingResponse stingInfo(Long user_id, StingRequestDto stingRequestDto) {
+    public StingResponse stingInfo(Long user_id, Long planId) {
         System.out.println("지금보낸 유저 아이디 : "+user_id);
         Long myId = user_id;
-        Long planId = stingRequestDto.getPlan_id();
         Optional<User> findMember  = userRepository.findNameById(myId);
         User sendUser = findMember.get();
 
