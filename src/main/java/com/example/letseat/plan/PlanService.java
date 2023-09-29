@@ -54,10 +54,10 @@ public class PlanService {
         return qrcode;
     }
 
-    public void savePlan(Long senderId, Long receiverId, LocalDate expired_date) {
+    public void savePlan(Long senderId, Long receiverId, LocalDate expiration_date) {
         Plan newPlan = new Plan();
         newPlan.setCreation_date(LocalDate.now());
-        newPlan.setExpiration_date(expired_date);
+        newPlan.setExpiration_date(expiration_date);
         User sender = userRepository.findById(senderId).orElseThrow();
         User receiver = userRepository.findById(receiverId).orElseThrow();
         newPlan.addUser(sender);
