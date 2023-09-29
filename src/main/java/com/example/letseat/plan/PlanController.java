@@ -46,8 +46,8 @@ public class PlanController {
         }
         Long receiverId = authMember.getId();
         Long senderId = planRequest.getSender_id();
-        LocalDate expiredDate = planRequest.getExpired_date();
-        planService.savePlan(senderId, receiverId, expiredDate);
+        LocalDate expiration_date = planRequest.getExpired_date();
+        planService.savePlan(senderId, receiverId, expiration_date);
     }
 
     @PutMapping("/met")
