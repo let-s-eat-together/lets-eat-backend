@@ -11,5 +11,6 @@ import lombok.*;
 public class TokenDto {
     private String token;
     private Long user_id;
+    private String name;
 
 }

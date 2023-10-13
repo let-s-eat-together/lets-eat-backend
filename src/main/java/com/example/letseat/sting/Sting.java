@@ -26,4 +26,7 @@ public class Sting {
     @Column(nullable = false)
     private LocalDateTime stingDate;
 
+    @Column(nullable = false)
+    private Long countSting=1L;//몇번째 찌르기 했는지
+
 }
