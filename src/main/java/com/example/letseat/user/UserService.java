@@ -63,7 +63,7 @@ public class UserService {
         User findUser = userRepository.findByDeviceId(deviceId)
                 .orElseThrow(()-> new RuntimeException("존재하지 않는 기기 id입니다."));
         return TokenDto.builder().token(jwtTokenProvider.createToken(findUser))
-                .user_id(findUser.getId()).build();
+                .user_id(findUser.getId()).name(findUser.getName()).build();
     }
 
     public void updateUserName(User user, String newName) {
