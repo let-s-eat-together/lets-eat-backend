@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
-@Controller
+@RestController
 public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
@@ -70,4 +69,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
         }
     }
+
+    @PutMapping("/deleteUser")
+    @ResponseBody
+    public void deleteUser(@Auth AuthMember authMember) {
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        Long user_id = authMember.getId();
+        userService.deleteUser(user_id);
+    }
+
 }

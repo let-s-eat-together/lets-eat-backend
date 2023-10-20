@@ -70,4 +70,10 @@ public class UserService {
         user.setName(newName);
     }
 
+    public void deleteUser(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow();
+        findUser.setName("탈퇴한 회원");
+        findUser.setDeviceId("");
+        userRepository.save(findUser);
+    }
 }
