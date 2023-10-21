@@ -3,6 +3,7 @@ package com.example.letseat.user;
 import com.example.letseat.auth.jwt.JwtTokenProvider;
 import com.example.letseat.plan.Plan;
 import com.example.letseat.user.data.ListResponse;
+import com.example.letseat.user.data.RenameResponse;
 import com.example.letseat.user.data.TokenDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,8 +67,11 @@ public class UserService {
                 .user_id(findUser.getId()).name(findUser.getName()).build();
     }
 
-    public void updateUserName(User user, String newName) {
+    public RenameResponse updateUserName(Long userId, String newName) {
+        User user = userRepository.findById(userId).orElseThrow();
         user.setName(newName);
+        RenameResponse response = RenameResponse.builder().user_name(user.getName()).build();
+        return response;
     }
 
     public void deleteUser(Long userId) {
