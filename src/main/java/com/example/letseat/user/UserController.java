@@ -53,21 +53,12 @@ public class UserController {
         return ResponseEntity.ok(userService.newLogin(loginRequest.getDevice_id()));
     }
     @PutMapping("/rename")
-    public ResponseEntity<String> changeUserName(
-    @RequestParam("user_name") String userName,
-    @RequestParam("user_id") Long userId) {
-        try {
-            if (userName != null && !userName.trim().isEmpty()) {
-                User user = new User();
-                userService.updateUserName(user, userName);
+    public ResponseEntity<RenameResponse> changeUserName(
+            @Auth AuthMember authMember, @RequestBody RenameRequest renameRequest) {
+        Long receiverId = authMember.getId();
 
-                return ResponseEntity.ok(userName);
+        return ResponseEntity.ok(userService.updateUserName(receiverId, renameRequest.getUser_name()));
 
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("사용자 이름은 공백일 수 없습니다.");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("업데이트 작업에 실패했습니다.");
-        }
+
     }
 }
