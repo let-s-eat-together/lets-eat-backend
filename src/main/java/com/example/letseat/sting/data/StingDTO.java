@@ -13,6 +13,5 @@ public class StingDTO {
     private Long plan_id;
     private LocalDateTime creation_date;
     private String other_user_name;
-
     private Long countSting;
 }

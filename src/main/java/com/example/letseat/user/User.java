@@ -26,6 +26,13 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPlan> userPlans = new ArrayList<>();
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserPlan> friend_relation = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserPlan> friend_request = new ArrayList<>();
+
     public void addPlan(Plan plan) {
         UserPlan userPlan = new UserPlan();
         userPlan.setPlan(plan);
