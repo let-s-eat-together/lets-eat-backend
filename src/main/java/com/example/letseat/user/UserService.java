@@ -4,6 +4,7 @@ import com.example.letseat.auth.jwt.JwtTokenProvider;
 import com.example.letseat.plan.Plan;
 import com.example.letseat.user.data.ListResponse;
 import com.example.letseat.user.data.RenameResponse;
+import com.example.letseat.user.data.SearchNameResponse;
 import com.example.letseat.user.data.TokenDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,13 @@ public class UserService {
         findUser.setName("탈퇴한 회원");
         findUser.setDeviceId("");
         userRepository.save(findUser);
+    }
+
+    public SearchNameResponse searchName(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow();
+        SearchNameResponse searchNameResponse = new SearchNameResponse();
+        searchNameResponse.setFriendName(findUser.getName());
+        searchNameResponse.setID(findUser.getId());
+        return searchNameResponse;
     }
 }
