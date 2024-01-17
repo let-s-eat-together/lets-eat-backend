@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 
-public class friend_request {
+public class FriendRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
