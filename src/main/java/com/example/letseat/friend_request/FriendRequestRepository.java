@@ -1,11 +1,12 @@
 package com.example.letseat.friend_request;
 
 
-import com.example.letseat.sting.Sting;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.List;
 
-public interface FriendRequestRepository extends JpaRepository<Sting, Long>{
+@Repository
+public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long>{
+    List<FriendRequest> findByUser2Id(Long user2_id);
 }

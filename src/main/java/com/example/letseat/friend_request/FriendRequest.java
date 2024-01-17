@@ -1,32 +1,27 @@
 package com.example.letseat.friend_request;
 
 
-import com.example.letseat.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
-
 public class FriendRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id1")
-    private User user1;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id2")
-    private User user2;
+    @Column(nullable = false)
+    private Long user1Id;
 
     @Column(nullable = false)
-    private LocalDateTime creation_date;
+    private Long user2Id;
+
+    @Column(nullable = false)
+    private LocalDate creationDate;
 
 }

@@ -5,7 +5,6 @@ import com.example.letseat.auth.argumentresolver.Auth;
 import com.example.letseat.user.data.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,4 +70,12 @@ public class UserController {
         userService.deleteUser(user_id);
     }
 
+    @GetMapping("/search-name/{userId}")
+    public ResponseEntity<SearchNameResponse> searchName(@Auth AuthMember authMember, @PathVariable Long userId){
+        if(authMember==null){
+            throw  new RuntimeException("authMember가 없음");
+        }
+        SearchNameResponse searchNameResponse = userService.searchName(userId);
+        return ResponseEntity.ok(searchNameResponse);
+    }
 }
