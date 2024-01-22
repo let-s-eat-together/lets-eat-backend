@@ -34,13 +34,17 @@ public class UserController {
     @PostMapping("/sign-up")
     @ResponseBody // device id 중복 기능 추가해야함.
     public Map<String, Object> saveMember(@RequestBody @Valid SignUpRequest request) {
-        Optional<User> checkExist = userRepository.findByDeviceId(request.getDevice_id());
+        Optional<User> checkExist = userRepository.findByEmail(request.getId());
         if(checkExist.isPresent()){
-            throw new RuntimeException("이미 존재하는 기기 id입니다.");
+            throw new RuntimeException("이미 존재하는 email입니다..");
         }
+        System.out.println(request.getId());
+        System.out.println(request.getUsername());
+        System.out.println(request.getPassword());
         User user = new User();
-        user.setName(request.getUsername());
-        user.setDeviceId(request.getDevice_id());
+        user.setEmail(request.getId());
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
         Long userId = userService.join(user);
         Map<String, Object> response = new HashMap<>();
         response.put("user_id", userId);
@@ -48,7 +52,9 @@ public class UserController {
     }
     @PostMapping("/login")
     public ResponseEntity<TokenDto> newLogin(@RequestBody LoginRequest loginRequest){
-        return ResponseEntity.ok(userService.newLogin(loginRequest.getDevice_id()));
+        System.out.println("loginRequest.getId(): "+loginRequest.getId());
+        System.out.println("loginRequest.getPassword() : "+loginRequest.getPassword());
+        return ResponseEntity.ok(userService.newLogin(loginRequest.getId(), loginRequest.getPassword()));
     }
     @PutMapping("/rename")
     public ResponseEntity<RenameResponse> changeUserName(

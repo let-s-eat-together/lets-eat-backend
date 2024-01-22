@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -30,9 +31,9 @@ public class UserService {
         for(Plan plan : planList) {
             String name;
             if (!id.equals(plan.getUsers().get(0).getId()))
-                name = plan.getUsers().get(0).getName();
+                name = plan.getUsers().get(0).getUsername();
             else if(!id.equals(plan.getUsers().get(1).getId()))
-                name = plan.getUsers().get(1).getName();
+                name = plan.getUsers().get(1).getUsername();
             else throw new IllegalArgumentException("Plan doesn't have other user");
             ListResponse listResponse = ListResponse.builder()
                     .plan_id(plan.getId())
@@ -48,44 +49,43 @@ public class UserService {
 
     @Transactional
     public Long join(User user) {
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new RuntimeException("Email cannot be null or empty");
+        }
+
         userRepository.save(user);
         return user.getId();
     }
-    public Long login(String device_id) {
-        Optional<User> findMember = userRepository.findByDeviceId(device_id);
-        if (findMember.isPresent()) {
-            User user = findMember.get();
-            return user.getId();
-        } else {
-            return -1L;
-        }
-    }
 
-    public TokenDto newLogin(String deviceId){
-        User findUser = userRepository.findByDeviceId(deviceId)
-                .orElseThrow(()-> new RuntimeException("존재하지 않는 기기 id입니다."));
+    public TokenDto newLogin(String ID_email, String Password){
+        User findUser = userRepository.findByEmail(ID_email)
+                .orElseThrow(()-> new RuntimeException("존재하지 않는 email 입니다."));
+        if(!Objects.equals(findUser.getPassword(), Password)){
+            throw new RuntimeException("아이디와 비밀번호가 일치하지 않습니다.");
+        }
         return TokenDto.builder().token(jwtTokenProvider.createToken(findUser))
-                .user_id(findUser.getId()).name(findUser.getName()).build();
+                .user_id(findUser.getId()).name(findUser.getUsername()).build();
     }
 
     public RenameResponse updateUserName(Long userId, String newName) {
         User user = userRepository.findById(userId).orElseThrow();
-        user.setName(newName);
-        RenameResponse response = RenameResponse.builder().user_name(user.getName()).build();
+        user.setUsername(newName);
+        RenameResponse response = RenameResponse.builder().user_name(user.getUsername()).build();
         return response;
     }
 
     public void deleteUser(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow();
-        findUser.setName("탈퇴한 회원");
-        findUser.setDeviceId("");
+        findUser.setUsername("탈퇴한 회원");
+        findUser.setEmail("");
+        findUser.setPassword("");
         userRepository.save(findUser);
     }
 
     public SearchNameResponse searchName(Long userId) {
         User findUser = userRepository.findById(userId).orElseThrow();
         SearchNameResponse searchNameResponse = new SearchNameResponse();
-        searchNameResponse.setFriendName(findUser.getName());
+        searchNameResponse.setFriendName(findUser.getUsername());
         searchNameResponse.setID(findUser.getId());
         return searchNameResponse;
     }

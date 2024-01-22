@@ -19,10 +19,12 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String email;
 
     @Column(nullable = false)
-    private String deviceId;
+    private String password;
+    @Column(nullable = false)
+    private String username;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserPlan> userPlans = new ArrayList<>();

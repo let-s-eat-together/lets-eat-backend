@@ -23,7 +23,7 @@ public class StingService {
             StingDTO dto = new StingDTO();
             dto.setPlan_id(sting.getPlanId());
             Optional<User> sender = userRepository.findNameById(sting.getSenderId());
-            dto.setOther_user_name(sender.get().getName());
+            dto.setOther_user_name(sender.get().getUsername());
             dto.setCreation_date(sting.getStingDate());
             dto.setCountSting(sting.getCountSting());
             factorizedStingDTOs.add(dto);
