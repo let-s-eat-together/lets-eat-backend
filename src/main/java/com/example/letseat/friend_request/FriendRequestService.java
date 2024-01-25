@@ -24,6 +24,7 @@ public class FriendRequestService {
         friendRequest.setUser2Id(user2_id);
         friendRequest.setCreationDate(LocalDate.now());
         friendRequestRepository.save(friendRequest);
+
     }
 
     public List<AlarmResponse> alarm(Long user2Id) {
@@ -33,7 +34,7 @@ public class FriendRequestService {
             User user1 = userRepository.findNameById(friendRequest.getUser1Id()).orElseThrow();
             AlarmResponse alarmResponse = new AlarmResponse();
             alarmResponse.setRequestingUserId(friendRequest.getUser1Id());
-            alarmResponse.setFriendName(user1.getName());
+            alarmResponse.setFriendName(user1.getUsername());
             alarmResponse.setCreationDate(friendRequest.getCreationDate().format(formatter));
 
             alarmResponses.add(alarmResponse);
