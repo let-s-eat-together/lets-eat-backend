@@ -9,9 +9,7 @@ import com.example.letseat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,43 +27,42 @@ public class FriendRelationService {
     }
 
     public AcceptResponse alarm(Long userId) {
-        List<AcceptResponse> acceptResponses = new ArrayList<>();
-        List<FriendRelation> acceptList = friendRelationRepository.findByUser1Id(userId);
-        Long maxId = 0L;//기준점
-        String returnname = "";
-        for (FriendRelation friendRelation : acceptList) {
-            Long compareId = friendRelation.getId();//이건 가장 비교.
-            if (maxId < compareId) {
-                returnname = friendRelation.getUser2().getUsername();
+        List<FriendRelation> friendRelations = friendRelationRepository.findByUser2_Id(userId);
 
-            }
-            User user2 = userRepository.findNameById(friendRelation.getUser2().getId()).orElseThrow();
+        // Extract user1 from the first matching friend relation (if any)
+        Long user1Id = friendRelations.isEmpty() ? null : friendRelations.get(0).getUser1().getId();
+
+            User user2 = userRepository.findNameById(user1Id).orElseThrow();
             AcceptResponse acceptResponse = new AcceptResponse();
             acceptResponse.setFriendName(user2.getUsername());
-            acceptResponses.add(acceptResponse);
-        }
-        //가장 최근 요청만 보내야 하는건가?
-
-        //return maxId;
-        if (maxId == 0L) {
-            throw new RuntimeException("친구 관련 데이터가 없음");
-        } else {
-            AcceptResponse acceptResponse = new AcceptResponse();
-            acceptResponse.setFriendName(returnname);
-            return acceptResponse;
-
-        }
-        //return returnname;
-        //return acceptResponses;
+        return acceptResponse;
     }
 
     public List<AcceptResponse> getFriendList(Long userId) {
 
 
-        User user = userRepository.findById(userId).get();
-        List<User> friends = user.getFriends();
+        List<FriendRelation> friendRelations = friendRelationRepository.findByUser1IdOrUser2Id(userId, userId);
 
-        return convertToAcceptResponses(friends);
+        // Extract unique user IDs from friend relations
+        Set<Long> uniqueFriendIds = new HashSet<>();
+        for (FriendRelation friendRelation : friendRelations) {
+            uniqueFriendIds.add(friendRelation.getUser1().getId());
+            uniqueFriendIds.add(friendRelation.getUser2().getId());
+        }
+
+        List<AcceptResponse> friendList = new ArrayList<>();
+        for (Long friendId : uniqueFriendIds) {
+            if (!friendId.equals(userId)) {
+                User friendUser = userRepository.findById(friendId).orElseThrow(); // Adjust as needed
+
+                AcceptResponse acceptResponse = new AcceptResponse();
+                acceptResponse.setFriendName(friendUser.getUsername()); // Assuming User has a getName() method
+
+                friendList.add(acceptResponse);
+            }
+        }
+
+        return friendList;
     }
 
     private List<AcceptResponse> convertToAcceptResponses(List<User> friends) {
