@@ -12,4 +12,7 @@ import java.util.List;
 public interface FriendRelationRepository extends JpaRepository<FriendRelation, Long> {
     List<FriendRelation> findByUser1Id(Long user1_id);
 
+    List<FriendRelation> findByUser2_Id(Long userId);
+
+    List<FriendRelation> findByUser1IdOrUser2Id(Long userId, Long userId1);
 }
