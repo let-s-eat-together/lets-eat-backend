@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class SearchNameResponse {
-    private String friendName;
-    private Long ID;
+    private String username;
+    private Long user_id;
+    private String email;
 }
