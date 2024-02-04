@@ -82,11 +82,16 @@ public class UserService {
         userRepository.save(findUser);
     }
 
-    public SearchNameResponse searchName(Long userId) {
-        User findUser = userRepository.findById(userId).orElseThrow();
-        SearchNameResponse searchNameResponse = new SearchNameResponse();
-        searchNameResponse.setFriendName(findUser.getUsername());
-        searchNameResponse.setID(findUser.getId());
-        return searchNameResponse;
+    public List<SearchNameResponse> searchName(String username) {
+        List<User> userList = userRepository.findByUsername(username);
+        List<SearchNameResponse> resultList = new ArrayList<>();
+        for(User user : userList) {
+            SearchNameResponse searchNameResponse = new SearchNameResponse();
+            searchNameResponse.setUser_id(user.getId());
+            searchNameResponse.setEmail(user.getEmail());
+            searchNameResponse.setUsername(user.getUsername());
+            resultList.add(searchNameResponse);
+        }
+        return resultList;
     }
 }

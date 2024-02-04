@@ -34,15 +34,15 @@ public class UserController {
     @PostMapping("/sign-up")
     @ResponseBody // device id 중복 기능 추가해야함.
     public Map<String, Object> saveMember(@RequestBody @Valid SignUpRequest request) {
-        Optional<User> checkExist = userRepository.findByEmail(request.getId());
+        Optional<User> checkExist = userRepository.findByEmail(request.getEmail());
         if(checkExist.isPresent()){
             throw new RuntimeException("이미 존재하는 email입니다..");
         }
-        System.out.println(request.getId());
+        System.out.println(request.getEmail());
         System.out.println(request.getUsername());
         System.out.println(request.getPassword());
         User user = new User();
-        user.setEmail(request.getId());
+        user.setEmail(request.getEmail());
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
         Long userId = userService.join(user);
@@ -52,9 +52,9 @@ public class UserController {
     }
     @PostMapping("/login")
     public ResponseEntity<TokenDto> newLogin(@RequestBody LoginRequest loginRequest){
-        System.out.println("loginRequest.getId(): "+loginRequest.getId());
+        System.out.println("loginRequest.getId(): "+loginRequest.getEmail());
         System.out.println("loginRequest.getPassword() : "+loginRequest.getPassword());
-        return ResponseEntity.ok(userService.newLogin(loginRequest.getId(), loginRequest.getPassword()));
+        return ResponseEntity.ok(userService.newLogin(loginRequest.getEmail(), loginRequest.getPassword()));
     }
     @PutMapping("/rename")
     public ResponseEntity<RenameResponse> changeUserName(
@@ -76,12 +76,11 @@ public class UserController {
         userService.deleteUser(user_id);
     }
 
-    @GetMapping("/search-name/{userId}")
-    public ResponseEntity<SearchNameResponse> searchName(@Auth AuthMember authMember, @PathVariable Long userId){
+    @GetMapping("/search-name/{username}")
+    public ResponseEntity<List<SearchNameResponse>> searchName(@Auth AuthMember authMember, @PathVariable String username){
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");
         }
-        SearchNameResponse searchNameResponse = userService.searchName(userId);
-        return ResponseEntity.ok(searchNameResponse);
+        return ResponseEntity.ok(userService.searchName(username));
     }
 }
