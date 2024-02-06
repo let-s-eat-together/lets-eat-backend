@@ -7,7 +7,6 @@ import com.example.letseat.friend_relation.data.AcceptFriendBody;
 import com.example.letseat.friend_relation.data.AcceptResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +27,7 @@ public class FriendRelationController {
         friendRelationService.acceptFriend(userId, acceptFriendBody.getRequestingUserId());
 
     }
-    @GetMapping("/friend/accept-alarm")
+    @GetMapping("/message/friend/accept")
     public ResponseEntity<AcceptResponse> acceptAlarm(@Auth AuthMember authMember){
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");
@@ -36,7 +35,7 @@ public class FriendRelationController {
         Long userId = authMember.getId();
         return ResponseEntity.ok(friendRelationService.alarm(userId));
     }
-    @GetMapping("/friend/get")
+    @GetMapping("/friend")
     public ResponseEntity<List<AcceptResponse>> getFriendList(@Auth AuthMember authMember){
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");

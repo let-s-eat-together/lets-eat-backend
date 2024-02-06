@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-    @GetMapping("/list")
+    @GetMapping("/plan")
     @ResponseBody
     public ResponseEntity<List<ListResponse>> lists(@Auth AuthMember authMember) {
         System.out.println("authMember = " + authMember);
@@ -56,7 +56,7 @@ public class UserController {
         System.out.println("loginRequest.getPassword() : "+loginRequest.getPassword());
         return ResponseEntity.ok(userService.newLogin(loginRequest.getEmail(), loginRequest.getPassword()));
     }
-    @PutMapping("/rename")
+    @PutMapping("/profile")
     public ResponseEntity<RenameResponse> changeUserName(
             @Auth AuthMember authMember, @RequestBody RenameRequest renameRequest) {
         Long receiverId = authMember.getId();
@@ -66,7 +66,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/deleteUser")
+    @PutMapping("/delete")
     @ResponseBody
     public void deleteUser(@Auth AuthMember authMember) {
         if(authMember==null){
@@ -76,7 +76,7 @@ public class UserController {
         userService.deleteUser(user_id);
     }
 
-    @GetMapping("/search-name/{username}")
+    @GetMapping("/search/{username}")
     public ResponseEntity<List<SearchNameResponse>> searchName(@Auth AuthMember authMember, @PathVariable String username){
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");

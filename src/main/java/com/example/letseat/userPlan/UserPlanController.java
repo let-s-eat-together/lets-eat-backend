@@ -4,9 +4,6 @@ import com.example.letseat.auth.AuthMember;
 import com.example.letseat.auth.argumentresolver.Auth;
 import com.example.letseat.sting.Sting;
 import com.example.letseat.sting.StingRepository;
-import com.example.letseat.userPlan.dto.StingRequestDto;
-import com.example.letseat.userPlan.dto.StingResponse;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -24,9 +21,9 @@ public class UserPlanController {
     private final UserPlanService userPlanService;
     private final StingRepository stingRepository;
 
-    @PostMapping("/sting/{planId}")
+    @PostMapping("/sting/{plan_id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> newSting(@Auth AuthMember authMember, @PathVariable Long planId){
+    public ResponseEntity<Map<String, Object>> newSting(@Auth AuthMember authMember, @PathVariable Long plan_id){
         //authMember가 sender, plan id를 비교해서 없으면 하나 새로 생성
         //반대편의 receiverId 찾아서 추가해놓기
         try{
@@ -36,14 +33,14 @@ public class UserPlanController {
             }
             Long senderId = authMember.getId();
 
-            Optional<Sting> sting=stingRepository.findBySenderIdAndPlanId(senderId,planId);
+            Optional<Sting> sting=stingRepository.findBySenderIdAndPlanId(senderId,plan_id);
             if(sting.isPresent()){
                 Sting existSting=sting.get();
                 existSting.setCountSting(sting.get().getCountSting()+1);
                 existSting.setStingDate(LocalDateTime.now());
                 stingRepository.save(existSting);
             }else{
-                userPlanService.createSting(senderId, planId);
+                userPlanService.createSting(senderId, plan_id);
             }
             responseData.put("status","success");
 
