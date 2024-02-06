@@ -38,7 +38,7 @@ public class PlanController {
         return ResponseEntity.ok(qrcode);
     }
 
-    @PostMapping("/plan")
+    @PostMapping("/plan/create")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void plan(@Auth AuthMember authMember, @RequestBody @Valid PlanRequest planRequest) {
         if(authMember==null){
@@ -50,7 +50,7 @@ public class PlanController {
         planService.savePlan(senderId, receiverId, expiration_date);
     }
 
-    @PutMapping("/met")
+    @PutMapping("/plan/complete")
     @ResponseBody
     public void changeMet(@RequestBody @Valid MetRequest metRequest){
         Long planId = metRequest.getPlan_id();

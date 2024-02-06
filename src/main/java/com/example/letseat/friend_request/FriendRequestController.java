@@ -28,7 +28,7 @@ public class FriendRequestController {
         friendRequestService.addRequest(userId, friendRequestBody.getRequestedUserId());
     }
 
-    @GetMapping("/friend/alarm")
+    @GetMapping("/message/friend/request")
     public ResponseEntity<List<AlarmResponse>> addAlarm(@Auth AuthMember authMember) {
         if(authMember==null){
             throw  new RuntimeException("authMember가 없음");

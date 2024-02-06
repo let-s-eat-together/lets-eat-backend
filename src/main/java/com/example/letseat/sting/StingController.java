@@ -7,12 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Map;
 
 @AllArgsConstructor
 @Controller
@@ -20,7 +17,7 @@ public class StingController {
     private final StingRepository stingRepository;
     private final StingService stingService;
 
-    @GetMapping("/sting")
+    @GetMapping("/message/sting")
     @ResponseBody
     public ResponseEntity<List<StingDTO>> Sting(@Auth AuthMember authMember) {
         if(authMember==null){
